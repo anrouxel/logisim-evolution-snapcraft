@@ -71,9 +71,8 @@ parts:
         getproxy "$https_proxy"
         set -- "$@" "-Dhttps.proxyHost=$host" "-Dhttps.proxyPort=$port"
       fi
-      ./gradlew "$@" shadowJar
-      cp build/libs/*-all.jar $CRAFT_PART_INSTALL/logisim-evolution.jar
-      ls -l $CRAFT_PART_INSTALL
+      ./gradlew "$@" shadowJar && \
+        cp build/libs/*-all.jar $CRAFT_PART_INSTALL/logisim-evolution.jar
     build-packages:
       - git
       - openjdk-21-jdk
