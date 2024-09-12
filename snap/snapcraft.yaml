@@ -1,0 +1,84 @@
+name: logisim-evolution-snapcraft
+version: 3.9.0
+summary: Digital logic design tool and simulator
+description: |
+  Digital logic design tool and simulator
+icon: snap/gui/logisim-icon-128.png
+license: GPL-3.0
+
+base: core24
+grade: stable
+confinement: strict
+adopt-info: logisim-evolution-snapcraft
+compression: lzo
+
+platforms:
+  amd64:
+  arm64:
+  armhf:
+
+layout:
+  /etc/fonts:
+    bind: $SNAP/etc/fonts
+  /usr/share/fonts:
+    bind: $SNAP/usr/share/fonts
+  /var/cache/fontconfig:
+    bind: $SNAP_DATA/var/cache/fontconfig
+
+apps:
+  logisim-evolution-snapcraft:
+    extensions: [gnome]
+    command: usr/lib/jvm/java-21-openjdk-$CRAFT_ARCH_BUILD_FOR/bin/java -jar $SNAP/logisim/logisim-evolution.jar
+    environment:
+      _JAVA_OPTIONS: "-Duser.home=$SNAP_USER_DATA"
+      XDG_DATA_HOME: $SNAP/usr/share
+      FONTCONFIG_PATH: $SNAP/etc/fonts/conf.d
+      FONTCONFIG_FILE: $SNAP/etc/fonts/fonts.conf
+
+    plugs:
+      - desktop
+      - desktop-legacy
+      - gsettings
+      - home
+      - opengl
+      - unity7
+      - wayland
+      - x11
+
+parts:     
+  logisim-evolution-snapcraft:
+    plugin: dump
+    source: https://github.com/logisim-evolution/logisim-evolution.git
+    source-type: git
+    source-tag: v$SNAPCRAFT_PROJECT_VERSION
+    override-build: |
+      # Gets the host and port from a proxy URL
+      #   $1 = the proxy URL, such as "http://10.10.10.1:8222/"
+      getproxy () {
+        # Parses URL with Bash or Dash shell parameter expansion
+        tail=${1#http*://}
+        head=${tail%%/*}
+        host=${head%:*}
+        port=${head##*:}
+      }
+      # Adds Java system properties using shell positional parameters
+      set --
+      if [ -n "${http_proxy:-}" ]; then
+        getproxy "$http_proxy"
+        set -- "$@" "-Dhttp.proxyHost=$host" "-Dhttp.proxyPort=$port"
+      fi
+      if [ -n "${https_proxy:-}" ]; then
+        getproxy "$https_proxy"
+        set -- "$@" "-Dhttps.proxyHost=$host" "-Dhttps.proxyPort=$port"
+      fi
+      ./gradlew "$@" shadowJar
+      cp build/libs/*-all.jar $CRAFT_PART_INSTALL/logisim-evolution.jar
+    build-packages:
+      - git
+      - openjdk-21-jdk
+      - libfontconfig1-dev
+    stage-packages:
+      - openjdk-21-jre
+      - fonts-freefont-ttf
+      - fonts-arphic-uming
+      - fontconfig-config
