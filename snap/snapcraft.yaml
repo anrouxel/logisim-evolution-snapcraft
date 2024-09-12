@@ -28,7 +28,7 @@ layout:
 apps:
   logisim-evolution-snapcraft:
     extensions: [gnome]
-    command: usr/lib/jvm/java-21-openjdk-$CRAFT_ARCH_BUILD_FOR/bin/java -jar logisim-evolution.jar
+    command: usr/lib/jvm/java-21-openjdk-$CRAFT_ARCH_BUILD_FOR/bin/java -jar $SNAP/logisim-evolution.jar
     environment:
       _JAVA_OPTIONS: "-Duser.home=$SNAP_USER_DATA"
       XDG_DATA_HOME: $SNAP/usr/share
@@ -73,6 +73,7 @@ parts:
       fi
       ./gradlew "$@" shadowJar
       cp build/libs/*-all.jar $CRAFT_PART_INSTALL/logisim-evolution.jar
+      ls -l $CRAFT_PART_INSTALL
     build-packages:
       - git
       - openjdk-21-jdk
