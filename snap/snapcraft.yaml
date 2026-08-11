@@ -65,6 +65,8 @@ parts:
       - openjdk-21-jdk
     stage-packages:
       - openjdk-21-jre
+    organize:
+      jar/logisim-evolution-*-all.jar: jar/logisim-evolution.jar
 
   local-parts:
     plugin: dump
