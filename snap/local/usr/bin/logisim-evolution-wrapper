@@ -9,5 +9,9 @@ opts=(
     "-Djava.util.prefs.userRoot=${SNAP_USER_DATA}"
 )
 
+# The gradle plugin hardlinks every jar produced by the build into
+# $SNAP/jar; pick the shadow (fat) jar, whose name embeds the app version.
+jar="$(find "${SNAP}/jar" -maxdepth 1 -iname 'logisim-evolution-*-all.jar' -print -quit)"
+
 # Run logisim-evolution with the gathered arguments
-exec java "${opts[@]}" -jar "${SNAP}/logisim-evolution/logisim-evolution.jar" "$@"
+exec "${SNAP}/bin/java" "${opts[@]}" -jar "${jar}" "$@"
