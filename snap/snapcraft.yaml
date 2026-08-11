@@ -50,25 +50,22 @@ apps:
 
 parts:
   logisim-evolution:
-    plugin: nil
-    build-attributes: [network]
+    plugin: gradle
     source: https://github.com/logisim-evolution/logisim-evolution.git
     source-type: git
     source-tag: v$SNAPCRAFT_PROJECT_VERSION
-    override-build: |
-      # Ensure that gradlew is executable
-      chmod +x gradlew
-      
-      # Build the application. Testing happened locally, so skip it here
-      ./gradlew shadowJar -x test --console=plain
-
-      mkdir -p $CRAFT_PART_INSTALL/logisim-evolution
-      cp build/libs/logisim-evolution-*-all.jar $CRAFT_PART_INSTALL/logisim-evolution/logisim-evolution.jar
+    gradle-task: shadowJar
+    gradle-parameters:
+      - -x
+      - test
+      - --console=plain
     build-packages:
       - gradle
       - openjdk-21-jdk
     stage-packages:
       - openjdk-21-jre
+    organize:
+      jar/logisim-evolution-*-all.jar: jar/logisim-evolution.jar
 
   local-parts:
     plugin: dump
