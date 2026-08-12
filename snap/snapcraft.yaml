@@ -20,7 +20,7 @@ contact: https://github.com/logisim-evolution/logisim-evolution/issues
 issues: https://github.com/logisim-evolution/logisim-evolution/issues
 source-code: https://github.com/logisim-evolution/logisim-evolution
 license: GPL-3.0
-adopt-info: logisim-evolution
+adopt-info: logisim-evolution-snapcraft
 icon: snap/gui/logisim-icon-128.png
 version: 4.1.0
 
@@ -34,7 +34,7 @@ platforms:
   arm64:
 
 apps:
-  logisim-evolution:
+  logisim-evolution-snapcraft:
     extensions: [gnome]
     command: usr/bin/logisim-evolution-wrapper
     plugs:
@@ -49,7 +49,7 @@ apps:
       - removable-media
 
 parts:
-  logisim-evolution:
+  logisim-evolution-snapcraft:
     plugin: gradle
     source: https://github.com/logisim-evolution/logisim-evolution.git
     source-type: git
