@@ -22,7 +22,7 @@ source-code: https://github.com/logisim-evolution/logisim-evolution
 license: GPL-3.0
 adopt-info: logisim-evolution-snapcraft
 icon: snap/gui/logisim-icon-128.png
-version: 4.1.0
+version: 5.0.0
 
 base: core24
 grade: stable
